@@ -76,13 +76,27 @@ function parseSavedChoices(raw) {
 }
 
 function getBallotSheet() {
-  const spreadsheetId = FormApp.getActiveForm().getDestinationId();
+  const cache = CacheService.getScriptCache();
+  let spreadsheetId = cache.get("ballot-spreadsheet-id");
+  if (!spreadsheetId) {
+    spreadsheetId = FormApp.getActiveForm().getDestinationId();
+    if (!spreadsheetId) throw new Error("The ballot response sheet is not connected.");
+    cache.put("ballot-spreadsheet-id", spreadsheetId, 21600);
+  }
   const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+  const cachedName = cache.get("ballot-sheet-name");
+  if (cachedName) {
+    const cachedSheet = spreadsheet.getSheetByName(cachedName);
+    if (cachedSheet) return cachedSheet;
+  }
   for (const sheet of spreadsheet.getSheets()) {
     if (sheet.getLastRow() < 1) continue;
     const header = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getDisplayValues()[0]
       .map(value => String(value).trim());
-    if (header.includes("Student name") && header.includes("Student ID")) return sheet;
+    if (header.includes("Student name") && header.includes("Student ID")) {
+      cache.put("ballot-sheet-name", sheet.getName(), 21600);
+      return sheet;
+    }
   }
   throw new Error("The ballot response sheet could not be found.");
 }
