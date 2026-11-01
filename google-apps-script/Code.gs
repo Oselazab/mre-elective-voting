@@ -38,6 +38,7 @@ function doPost(e) {
         .withItemResponse(checkboxItem.asCheckboxItem().createResponse(unique))
         .submit();
       matches.forEach(oldResponse => form.deleteResponse(oldResponse.getId()));
+      deduplicateResponseSheet(form, studentId);
       return reply({ok:true, action, requestId, updated:matches.length>0});
     } finally {
       lock.releaseLock();
@@ -48,9 +49,33 @@ function doPost(e) {
 }
 
 function findResponses(form, idItem, studentId) {
+  const wanted = normalizeStudentId(studentId);
   return form.getResponses().filter(response => {
     const itemResponse = response.getItemResponses().find(r => r.getItem().getId() === idItem.getId());
-    return itemResponse && String(itemResponse.getResponse()).trim() === studentId;
+    return itemResponse && normalizeStudentId(itemResponse.getResponse()) === wanted;
+  });
+}
+
+function normalizeStudentId(value) {
+  return String(value == null ? "" : value).trim().replace(/\s+/g, "").toUpperCase();
+}
+
+function deduplicateResponseSheet(form, studentId) {
+  const spreadsheetId = form.getDestinationId();
+  if (!spreadsheetId) return;
+  const wanted = normalizeStudentId(studentId);
+  SpreadsheetApp.openById(spreadsheetId).getSheets().forEach(sheet => {
+    const rowCount = sheet.getLastRow();
+    const columnCount = sheet.getLastColumn();
+    if (rowCount < 2 || columnCount < 1) return;
+    const rows = sheet.getRange(1, 1, rowCount, columnCount).getDisplayValues();
+    const idColumn = rows[0].findIndex(value => String(value).trim() === "Student ID");
+    if (idColumn < 0) return;
+    const matchingRows = [];
+    for (let index = 1; index < rows.length; index++) {
+      if (normalizeStudentId(rows[index][idColumn]) === wanted) matchingRows.push(index + 1);
+    }
+    matchingRows.slice(0, -1).reverse().forEach(rowNumber => sheet.deleteRow(rowNumber));
   });
 }
 
