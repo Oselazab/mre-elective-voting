@@ -1,10 +1,7 @@
-const FORM_RESPONSE_URL="https://docs.google.com/forms/d/e/1FAIpQLScacgrt_p3nNlk8RZUKSHQOeGY9jnAoZa6Kt7aY1CP8CgeYMw/formResponse";
-const COURSE_ENTRY="entry.814126807";
-const NAME_ENTRY="entry.1184840467";
-const ID_ENTRY="entry.771655426";
+const VOTE_API_URL="https://script.google.com/macros/s/AKfycbw054r-0FzZAiJCbNnrQor6ddpsk6d6Bfi1OGHtiOU1ekP1bgjXGwBByqkujjqW58TTzw/exec";
 const CLOSED=new Set(["eep-456","cse-426"]);
 const selected=new Set();
-let courses=[],query="",sort="code",submissionPending=false;
+let courses=[],query="",sort="code";
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??"").replace(/[&<>\"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 function updateBallot(){
@@ -14,9 +11,10 @@ function updateBallot(){
  const picked=courses.filter(course=>selected.has(course.id));
  $("#selectedPreview").innerHTML=picked.length?picked.map(course=>`<span>${esc(course.code)} · ${esc(course.title)}</span>`).join(""):"Your selected courses will appear here.";
  $("#submitVote").disabled=count!==6;
- $("#formStatus").textContent=count===6?"Six choices selected. Add your name and student ID to submit.":`Choose ${6-count} more course${6-count===1?"":"s"}.`;
+ $("#formStatus").textContent=count===6?"Six choices selected. Add your name and student ID to save.":`Choose ${6-count} more course${6-count===1?"":"s"}.`;
  const heroFoot=document.querySelector(".stat-foot");
- if(heroFoot)heroFoot.textContent=count===6?"Six choices ready to submit":`${count} of 6 choices selected`;
+ if(heroFoot)heroFoot.textContent=count===6?"Six choices ready to save":`${count} of 6 choices selected`;
+ $("#submitVote").textContent=$("#savedVoteState").value==="found"?"Update my saved choices →":"Save my six choices →";
 }
 function toggleCourse(id){
  if(CLOSED.has(id))return;
@@ -43,18 +41,35 @@ function render(){
  });
 }
 function addHidden(form,name,value){const input=document.createElement("input");input.type="hidden";input.name=name;input.value=value;form.append(input);}
-function submitVote(event){
- event.preventDefault();
+function sendToBackend(action){
+ if(VOTE_API_URL==="SET_AFTER_GOOGLE_DEPLOYMENT"){$("#formStatus").textContent="Saving is being connected. Please try again later.";return;}
  const studentName=$("#studentName").value.trim(),studentId=$("#studentId").value.trim();
  if(!studentName||!studentId){$("#formStatus").textContent="Enter both your name and student ID.";(!studentName?$("#studentName"):$("#studentId")).focus();return;}
- if(selected.size!==6){$("#formStatus").textContent="Select exactly six open courses before submitting.";return;}
- const form=document.createElement("form");form.method="POST";form.action=FORM_RESPONSE_URL;form.target="googleReceipt";form.hidden=true;
- addHidden(form,NAME_ENTRY,studentName);addHidden(form,ID_ENTRY,studentId);
- courses.filter(course=>selected.has(course.id)).forEach(course=>addHidden(form,COURSE_ENTRY,course.formLabel));
- addHidden(form,"fvv","1");addHidden(form,"pageHistory","0");addHidden(form,"fbzx","-4242965672675970618");
- document.body.append(form);
- submissionPending=true;$("#submitVote").disabled=true;$("#formStatus").textContent="Submitting your choices…";
+ if(action==="save"&&selected.size!==6){$("#formStatus").textContent="Select exactly six open courses before saving.";return;}
+ const bridge=$("#voteBridge"),form=document.createElement("form");
+ form.method="POST";form.action=VOTE_API_URL;form.target=bridge.name;form.hidden=true;
+ addHidden(form,"action",action);addHidden(form,"studentName",studentName);addHidden(form,"studentId",studentId);addHidden(form,"requestId",crypto.randomUUID());
+ if(action==="save")courses.filter(course=>selected.has(course.id)).forEach(course=>addHidden(form,"course",course.formLabel));
+ document.body.append(form);$("#loadSavedVote").disabled=true;$("#submitVote").disabled=true;
+ $("#formStatus").textContent=action==="lookup"?"Looking for your saved choices…":"Saving your six choices…";
  form.submit();form.remove();
+}
+function handleBackendMessage(event){
+ const allowedOrigins=["https://script.google.com","https://script.googleusercontent.com"];
+ if(!allowedOrigins.includes(event.origin)||!event.data||event.data.source!=="mre-voting-backend")return;
+ let result;try{result=JSON.parse(decodeURIComponent(event.data.payload));}catch{return;}
+ if(!result||!result.ok){$("#formStatus").textContent=result?.message||"We couldn’t save your choices. Please try again.";$("#loadSavedVote").disabled=false;updateBallot();return;}
+ if(result.action==="lookup"){
+  if(!result.found){$("#savedVoteState").value="";$("#formStatus").textContent="No saved vote was found for that student ID. Choose six courses, then save.";}
+  else{
+   const ids=new Set(result.courses.map(label=>courses.find(course=>course.formLabel===label)?.id).filter(Boolean));
+   selected.clear();ids.forEach(id=>selected.add(id));$("#savedVoteState").value="found";render();updateBallot();
+   $("#formStatus").textContent="Your saved choices are loaded. Change any selections, then update your vote.";
+  }
+  $("#loadSavedVote").disabled=false;return;
+ }
+ $("#savedVoteState").value="found";$("#formStatus").textContent=result.updated?"Your saved vote has been updated. You can change it again any time.":"Your vote has been saved. You can load and change it any time.";
+ $("#loadSavedVote").disabled=false;updateBallot();
 }
 async function init(){
  try{const response=await fetch("courses.json");if(!response.ok)throw Error();courses=await response.json();render();updateBallot();$("#status").textContent="Course descriptions loaded. Click six open electives to build your vote."}
@@ -62,10 +77,9 @@ async function init(){
 }
 $("#search").addEventListener("input",event=>{query=event.target.value.trim().toLowerCase();render()});
 $("#sort").addEventListener("change",event=>{sort=event.target.value;render()});
-$("#voteForm").addEventListener("submit",submitVote);
-$("#googleReceipt").addEventListener("load",()=>{
- if(!submissionPending)return;
- submissionPending=false;$("#receipt").hidden=false;$("#formStatus").textContent="Your vote has been sent to the response list.";
- $("#receipt").scrollIntoView({behavior:"smooth",block:"center"});
-});
+$("#voteForm").addEventListener("submit",event=>{event.preventDefault();sendToBackend("save")});
+$("#loadSavedVote").addEventListener("click",()=>sendToBackend("lookup"));
+$("#studentName").addEventListener("input",()=>{$("#savedVoteState").value="";updateBallot()});
+$("#studentId").addEventListener("input",()=>{if($("#savedVoteState").value==="found"){selected.clear();render()}$("#savedVoteState").value="";updateBallot()});
+window.addEventListener("message",handleBackendMessage);
 init();
