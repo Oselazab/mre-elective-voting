@@ -4,11 +4,11 @@ A student voting page for the 28 elective options listed in the 2020 Mechatronic
 
 Website: https://oselazab.github.io/mre-elective-voting/
 
-Students choose exactly six of the 26 remaining electives in the Google Form embedded on the page. They enter their name and student ID; email collection and Google sign-in are off, and response editing is enabled. EEP 456 and CSE 426 remain visible on the course list but are already selected and closed to new choices. The organizer can view per-course totals in the form's Responses tab.
+Students click six of the 26 open course cards, then enter their name and student ID on the page. The response is sent to the linked Google Form without displaying its ballot interface. Google Forms stores the response and provides an edit-response link after submission. Email collection and Google sign-in are off. EEP 456 and CSE 426 remain visible but closed to new choices.
 
 ## Editing
-- `courses.json`: elective names, codes, and closed status
-- `index.html` and `styles.css`: page structure, embedded form, and appearance
-- `app.js`: search, sorting, and course cards
+- `courses.json`: elective names, codes, descriptions, and closed status
+- `index.html` and `styles.css`: page structure and appearance
+- `app.js`: search, sorting, course selection, and form submission
 
 Every push to `main` publishes the site through GitHub Pages.
