@@ -32,13 +32,14 @@ function doPost(e) {
         throw new Error("Select exactly six available courses.");
       }
 
-      form.createResponse()
+      const savedResponse = form.createResponse()
         .withItemResponse(nameItem.asTextItem().createResponse(studentName))
         .withItemResponse(idItem.asTextItem().createResponse(studentId))
         .withItemResponse(checkboxItem.asCheckboxItem().createResponse(unique))
         .submit();
       matches.forEach(oldResponse => form.deleteResponse(oldResponse.getId()));
-      deduplicateResponseSheet(form, studentId);
+      if (matches.length) deduplicateResponseSheet(form, studentId);
+      cacheResponseId(studentId, savedResponse.getId());
       return reply({ok:true, action, requestId, updated:matches.length>0});
     } finally {
       lock.releaseLock();
@@ -50,10 +51,35 @@ function doPost(e) {
 
 function findResponses(form, idItem, studentId) {
   const wanted = normalizeStudentId(studentId);
-  return form.getResponses().filter(response => {
+  const cachedId = getCachedResponseId(studentId);
+  if (cachedId) {
+    try {
+      const cachedResponse = form.getResponse(cachedId);
+      const cachedItem = cachedResponse.getItemResponses().find(r => r.getItem().getId() === idItem.getId());
+      if (cachedItem && normalizeStudentId(cachedItem.getResponse()) === wanted) return [cachedResponse];
+    } catch (error) {
+      // A deleted or expired cached response falls through to the full lookup.
+    }
+  }
+  const responses = form.getResponses().filter(response => {
     const itemResponse = response.getItemResponses().find(r => r.getItem().getId() === idItem.getId());
     return itemResponse && normalizeStudentId(itemResponse.getResponse()) === wanted;
   });
+  if (responses.length) cacheResponseId(studentId, responses[responses.length - 1].getId());
+  return responses;
+}
+
+function responseCacheKey(studentId) {
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, normalizeStudentId(studentId));
+  return "response:" + Utilities.base64EncodeWebSafe(digest).replace(/=+$/g, "");
+}
+
+function getCachedResponseId(studentId) {
+  return CacheService.getScriptCache().get(responseCacheKey(studentId));
+}
+
+function cacheResponseId(studentId, responseId) {
+  CacheService.getScriptCache().put(responseCacheKey(studentId), responseId, 21600);
 }
 
 function normalizeStudentId(value) {
@@ -64,18 +90,30 @@ function deduplicateResponseSheet(form, studentId) {
   const spreadsheetId = form.getDestinationId();
   if (!spreadsheetId) return;
   const wanted = normalizeStudentId(studentId);
-  SpreadsheetApp.openById(spreadsheetId).getSheets().forEach(sheet => {
+  SpreadsheetApp.openById(spreadsheetId).getSheets().some(sheet => {
     const rowCount = sheet.getLastRow();
     const columnCount = sheet.getLastColumn();
-    if (rowCount < 2 || columnCount < 1) return;
-    const rows = sheet.getRange(1, 1, rowCount, columnCount).getDisplayValues();
-    const idColumn = rows[0].findIndex(value => String(value).trim() === "Student ID");
-    if (idColumn < 0) return;
-    const matchingRows = [];
-    for (let index = 1; index < rows.length; index++) {
-      if (normalizeStudentId(rows[index][idColumn]) === wanted) matchingRows.push(index + 1);
+    if (rowCount < 2 || columnCount < 1) return false;
+    const header = sheet.getRange(1, 1, 1, columnCount).getDisplayValues()[0];
+    const idColumn = header.findIndex(value => String(value).trim() === "Student ID");
+    if (idColumn < 0) return false;
+    const ids = sheet.getRange(2, idColumn + 1, rowCount - 1, 1).getDisplayValues();
+    const matches = ids.map((row, index) => normalizeStudentId(row[0]) === wanted ? index + 2 : -1)
+      .filter(rowNumber => rowNumber > 0)
+      .sort((a, b) => b - a);
+    // Keep the newest row; delete only older matches, bottom-up, grouping adjacent rows.
+    const oldRows = matches.slice(1);
+    for (let index = 0; index < oldRows.length;) {
+      let end = oldRows[index];
+      let start = end;
+      index++;
+      while (index < oldRows.length && oldRows[index] === start - 1) {
+        start = oldRows[index];
+        index++;
+      }
+      sheet.deleteRows(start, end - start + 1);
     }
-    matchingRows.slice(0, -1).reverse().forEach(rowNumber => sheet.deleteRow(rowNumber));
+    return true;
   });
 }
 
@@ -86,5 +124,9 @@ function reply(data) {
     '</script></body></html>';
   return HtmlService.createHtmlOutput(html)
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function authorizeSpreadsheetAccess() {
+  return SpreadsheetApp.openById(FormApp.getActiveForm().getDestinationId()).getName();
 }
 
