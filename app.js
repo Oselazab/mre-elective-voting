@@ -56,9 +56,11 @@ function sendToBackend(action){
  form.submit();form.remove();
 }
 function handleBackendMessage(event){
- const allowedOrigins=["https://script.google.com","https://script.googleusercontent.com"];
- if(!allowedOrigins.includes(event.origin)||!event.data||event.data.source!=="mre-voting-backend")return;
+ const trustedOrigin=event.origin==="https://script.google.com"||event.origin.endsWith(".googleusercontent.com");
+ if(!trustedOrigin||!event.data||event.data.source!=="mre-voting-backend")return;
  let result;try{result=JSON.parse(decodeURIComponent(event.data.payload));}catch{return;}
+ if(result?.requestId!==pendingRequestId)return;
+ pendingRequestId="";
  if(!result||!result.ok){$("#formStatus").textContent=result?.message||"We couldn’t save your choices. Please try again.";$("#loadSavedVote").disabled=false;updateBallot();return;}
  if(result.action==="lookup"){
   if(!result.found){$("#savedVoteState").value="";$("#formStatus").textContent="No saved vote was found for that student ID. Choose six courses, then save.";}
