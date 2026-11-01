@@ -1,7 +1,7 @@
 const VOTE_API_URL="https://script.google.com/macros/s/AKfycbw054r-0FzZAiJCbNnrQor6ddpsk6d6Bfi1OGHtiOU1ekP1bgjXGwBByqkujjqW58TTzw/exec";
 const CLOSED=new Set(["eep-456","cse-426"]);
 const selected=new Set();
-let courses=[],query="",sort="code";
+let courses=[],query="",sort="code",pendingRequestId="";
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??"").replace(/[&<>\"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 function updateBallot(){
@@ -48,7 +48,8 @@ function sendToBackend(action){
  if(action==="save"&&selected.size!==6){$("#formStatus").textContent="Select exactly six open courses before saving.";return;}
  const bridge=$("#voteBridge"),form=document.createElement("form");
  form.method="POST";form.action=VOTE_API_URL;form.target=bridge.name;form.hidden=true;
- addHidden(form,"action",action);addHidden(form,"studentName",studentName);addHidden(form,"studentId",studentId);addHidden(form,"requestId",crypto.randomUUID());
+ pendingRequestId=crypto.randomUUID();
+ addHidden(form,"action",action);addHidden(form,"studentName",studentName);addHidden(form,"studentId",studentId);addHidden(form,"requestId",pendingRequestId);
  if(action==="save")courses.filter(course=>selected.has(course.id)).forEach(course=>addHidden(form,"course",course.formLabel));
  document.body.append(form);$("#loadSavedVote").disabled=true;$("#submitVote").disabled=true;
  $("#formStatus").textContent=action==="lookup"?"Looking for your saved choices…":"Saving your six choices…";
