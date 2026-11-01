@@ -1,0 +1,170 @@
+[
+  {
+    "id": "cse-426",
+    "code": "CSE 426",
+    "title": "Machine Learning Practicing",
+    "closed": true
+  },
+  {
+    "id": "cse-427",
+    "code": "CSE 427",
+    "title": "Identification, Estimation and Learning",
+    "closed": false
+  },
+  {
+    "id": "cse-479",
+    "code": "CSE 479",
+    "title": "Vehicle Networking and Internet of Things",
+    "closed": false
+  },
+  {
+    "id": "eec-346",
+    "code": "EEC 346",
+    "title": "Digital Circuit Design",
+    "closed": false
+  },
+  {
+    "id": "eec-347",
+    "code": "EEC 347",
+    "title": "Microcontroller Engineering-2",
+    "closed": false
+  },
+  {
+    "id": "eep-316",
+    "code": "EEP 316",
+    "title": "Building Management Systems",
+    "closed": false
+  },
+  {
+    "id": "eep-326",
+    "code": "EEP 326",
+    "title": "Power Plant Systems and Control",
+    "closed": false
+  },
+  {
+    "id": "eep-357",
+    "code": "EEP 357",
+    "title": "Industrial Automation 2",
+    "closed": false
+  },
+  {
+    "id": "eep-456",
+    "code": "EEP 456",
+    "title": "Power Electronics and Electric Drives-2",
+    "closed": true
+  },
+  {
+    "id": "emp-316",
+    "code": "EMP 316",
+    "title": "Finite Element Analysis",
+    "closed": false
+  },
+  {
+    "id": "emp-318",
+    "code": "EMP 318",
+    "title": "Engineering Optimization",
+    "closed": false
+  },
+  {
+    "id": "mec-317",
+    "code": "MEC 317",
+    "title": "HVAC Systems and Control",
+    "closed": false
+  },
+  {
+    "id": "mec-318",
+    "code": "MEC 318",
+    "title": "Micro- Heat Exchanger Design",
+    "closed": false
+  },
+  {
+    "id": "mec-346",
+    "code": "MEC 346",
+    "title": "Industrial Mechanisms",
+    "closed": false
+  },
+  {
+    "id": "mec-358",
+    "code": "MEC 358",
+    "title": "Design of Mechatronic Systems-2",
+    "closed": false
+  },
+  {
+    "id": "mec-359",
+    "code": "MEC 359",
+    "title": "Smart Materials and Structures",
+    "closed": false
+  },
+  {
+    "id": "mec-366",
+    "code": "MEC 366",
+    "title": "Industrial Process Control",
+    "closed": false
+  },
+  {
+    "id": "mec-457",
+    "code": "MEC 457",
+    "title": "Motion Planning",
+    "closed": false
+  },
+  {
+    "id": "mec-458",
+    "code": "MEC 458",
+    "title": "Introduction to Biotronics Systems",
+    "closed": false
+  },
+  {
+    "id": "mec-459",
+    "code": "MEC 459",
+    "title": "CNC Machines",
+    "closed": false
+  },
+  {
+    "id": "mec-466",
+    "code": "MEC 466",
+    "title": "Biomechanics and Robotics",
+    "closed": false
+  },
+  {
+    "id": "mec-467",
+    "code": "MEC 467",
+    "title": "Rehabilitation Robotics",
+    "closed": false
+  },
+  {
+    "id": "mec-468",
+    "code": "MEC 468",
+    "title": "Mobile Robot",
+    "closed": false
+  },
+  {
+    "id": "mec-469",
+    "code": "MEC 469",
+    "title": "Micro robotics",
+    "closed": false
+  },
+  {
+    "id": "mec-476",
+    "code": "MEC 476",
+    "title": "Vehicle Dynamics and Control",
+    "closed": false
+  },
+  {
+    "id": "mec-477",
+    "code": "MEC 477",
+    "title": "Autonomous Vehicles",
+    "closed": false
+  },
+  {
+    "id": "mec-478",
+    "code": "MEC 478",
+    "title": "Vehicle Safety and Control",
+    "closed": false
+  },
+  {
+    "id": "mec-479",
+    "code": "MEC 479",
+    "title": "Introduction to Autotronics Systems",
+    "closed": false
+  }
+]
