@@ -61,7 +61,7 @@ function handleBackendMessage(event){
  let result;try{result=JSON.parse(decodeURIComponent(event.data.payload));}catch{return;}
  if(result?.requestId!==pendingRequestId)return;
  pendingRequestId="";
- if(!result||!result.ok){$("#formStatus").textContent=result?.message||"We couldn’t save your choices. Please try again.";$("#loadSavedVote").disabled=false;updateBallot();return;}
+ if(!result||!result.ok){$("#loadSavedVote").disabled=false;updateBallot();$("#formStatus").textContent=result?.message||"We couldn’t save your choices. Please try again.";return;}
  if(result.action==="lookup"){
   if(!result.found){$("#savedVoteState").value="";$("#formStatus").textContent="No saved vote was found for that student ID. Choose six courses, then save.";}
   else{
@@ -71,8 +71,9 @@ function handleBackendMessage(event){
   }
   $("#loadSavedVote").disabled=false;return;
  }
- $("#savedVoteState").value="found";$("#formStatus").textContent=result.updated?"Your saved vote has been updated. You can change it again any time.":"Your vote has been saved. You can load and change it any time.";
+ $("#savedVoteState").value="found";
  $("#loadSavedVote").disabled=false;updateBallot();
+ $("#formStatus").textContent=result.updated?"Your saved vote has been updated. You can change it again any time.":"Your vote has been saved. You can load and change it any time.";
 }
 async function init(){
  try{const response=await fetch("courses.json");if(!response.ok)throw Error();courses=await response.json();render();updateBallot();$("#status").textContent="Course descriptions loaded. Click six open electives to build your vote."}
