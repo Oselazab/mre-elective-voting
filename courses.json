@@ -3,168 +3,222 @@
     "id": "cse-426",
     "code": "CSE 426",
     "title": "Machine Learning Practicing",
-    "closed": true
+    "closed": true,
+    "description": "Explore supervised and unsupervised learning, regression, data preparation, model evaluation, decision trees, Naive Bayes, ensembles, and random forests. This course has already been selected."
   },
   {
     "id": "cse-427",
     "code": "CSE 427",
     "title": "Identification, Estimation and Learning",
-    "closed": false
+    "closed": false,
+    "description": "Study system identification and estimation, including least squares, Kalman filters, neural networks, model selection, experiment design, and validation.",
+    "formLabel": "CSE 427 - Identification, Estimation and Learning"
   },
   {
     "id": "cse-479",
     "code": "CSE 479",
     "title": "Vehicle Networking and Internet of Things",
-    "closed": false
+    "closed": false,
+    "description": "Learn vehicle communication networks and protocols such as CAN, LIN, Ethernet, TCP/IP, and GPS based positioning.",
+    "formLabel": "CSE 479 — Vehicle Networking and Internet of Things"
   },
   {
     "id": "eec-346",
     "code": "EEC 346",
     "title": "Digital Circuit Design",
-    "closed": false
+    "closed": false,
+    "description": "Design digital circuits with VHDL, from modeling and simulation through synthesis and implementation on FPGAs.",
+    "formLabel": "EEC 346 - Digital Circuit Design"
   },
   {
     "id": "eec-347",
     "code": "EEC 347",
     "title": "Microcontroller Engineering-2",
-    "closed": false
+    "closed": false,
+    "description": "Program ARM Cortex-M microcontrollers and explore processor architectures, interrupts, memory-mapped peripherals, embedded C, and software structures.",
+    "formLabel": "EEC 347 - Microcontroller Engineering-2"
   },
   {
     "id": "eep-316",
     "code": "EEP 316",
     "title": "Building Management Systems",
-    "closed": false
+    "closed": false,
+    "description": "Explore building management systems for HVAC, lighting, fire, and security, including sensors, controls, SCADA, energy management, and occupancy applications.",
+    "formLabel": "EEP 316 - Building Management Systems"
   },
   {
     "id": "eep-326",
     "code": "EEP 326",
     "title": "Power Plant Systems and Control",
-    "closed": false
+    "closed": false,
+    "description": "Study power plant components and instrumentation, boiler and turbine control, steam systems, safety, load management, and combined-cycle operation.",
+    "formLabel": "EEP 326 - Power Plant Systems and Control"
   },
   {
     "id": "eep-357",
     "code": "EEP 357",
     "title": "Industrial Automation 2",
-    "closed": false
+    "closed": false,
+    "description": "Work with distributed control systems, PLCs, industrial networks, HMI and SCADA, safety systems, smart devices, and closed-loop process control.",
+    "formLabel": "EEP 357 - Industrial Automation 2"
   },
   {
     "id": "eep-456",
     "code": "EEP 456",
     "title": "Power Electronics and Electric Drives-2",
-    "closed": true
+    "closed": true,
+    "description": "Study switching converters, MOSFET and IGBT gate driving, DC motor drives, braking, V/f control, and vector and direct-torque control. This course has already been selected."
   },
   {
     "id": "emp-316",
     "code": "EMP 316",
     "title": "Finite Element Analysis",
-    "closed": false
+    "closed": false,
+    "description": "Build finite element models for structural and coupled problems, program 2D elements, explore nonlinear analysis, and use commercial tools for meshing and results.",
+    "formLabel": "EMP 316 - Finite Element Analysis"
   },
   {
     "id": "emp-318",
     "code": "EMP 318",
     "title": "Engineering Optimization",
-    "closed": false
+    "closed": false,
+    "description": "Formulate and solve engineering design optimization problems using graphical, numerical, gradient-based, constrained, and linear programming methods.",
+    "formLabel": "EMP 318 - Engineering Optimization"
   },
   {
     "id": "mec-317",
     "code": "MEC 317",
     "title": "HVAC Systems and Control",
-    "closed": false
+    "closed": false,
+    "description": "Design and control HVAC systems, including air handlers, VAV, chilled and hot water sequencing, air distribution, fans, pumps, boilers, chillers, and direct digital control.",
+    "formLabel": "MEC 317 - HVAC Systems and Control"
   },
   {
     "id": "mec-318",
     "code": "MEC 318",
     "title": "Micro- Heat Exchanger Design",
-    "closed": false
+    "closed": false,
+    "description": "Design micro-channel heat exchangers and compare their thermal performance and pressure drop with conventional exchangers, including electronics cooling applications.",
+    "formLabel": "MEC 318 - Micro- Heat Exchanger Design"
   },
   {
     "id": "mec-346",
     "code": "MEC 346",
     "title": "Industrial Mechanisms",
-    "closed": false
+    "closed": false,
+    "description": "Explore automated assembly, transfer and indexing systems, vibratory feeders, part orientation and handling, gripping mechanisms, and biomimetic mechanisms.",
+    "formLabel": "MEC 346 - Industrial Mechanisms"
   },
   {
     "id": "mec-358",
     "code": "MEC 358",
     "title": "Design of Mechatronic Systems-2",
-    "closed": false
+    "closed": false,
+    "description": "Model complex mechatronic systems and design control strategies for vehicles and robots, including online optimization and a team design project.",
+    "formLabel": "MEC 358 - Design of Mechatronic Systems-2"
   },
   {
     "id": "mec-359",
     "code": "MEC 359",
     "title": "Smart Materials and Structures",
-    "closed": false
+    "closed": false,
+    "description": "Study smart material fabrication, modeling, and design, including piezoelectrics, shape-memory alloys, electroactive polymers, and fiber optics.",
+    "formLabel": "MEC 359 - Smart Materials and Structures"
   },
   {
     "id": "mec-366",
     "code": "MEC 366",
     "title": "Industrial Process Control",
-    "closed": false
+    "closed": false,
+    "description": "Develop industrial process-control strategies using feedback, feedforward, model predictive, and supervisory control, with instrumentation, safety, testing, and case studies.",
+    "formLabel": "MEC 366 - Industrial Process Control"
   },
   {
     "id": "mec-457",
     "code": "MEC 457",
     "title": "Motion Planning",
-    "closed": false
+    "closed": false,
+    "description": "Plan motions for robot arms, mobile and multi-robot systems, including non-holonomic and high-dimensional planning, with algorithm implementation and a project.",
+    "formLabel": "MEC 457 - Motion Planning"
   },
   {
     "id": "mec-458",
     "code": "MEC 458",
     "title": "Introduction to Biotronics Systems",
-    "closed": false
+    "closed": false,
+    "description": "Combine biological signals and sensors with mechatronics, human-robot interaction, and medical robotics such as image-guided surgery and rehabilitation.",
+    "formLabel": "MEC 458 - Introduction to Biotronics Systems"
   },
   {
     "id": "mec-459",
     "code": "MEC 459",
     "title": "CNC Machines",
-    "closed": false
+    "closed": false,
+    "description": "Learn CNC machine axes, milling and turning, tool paths, cutting motion, and program preparation using G-codes and M-codes.",
+    "formLabel": "MEC 459 - CNC Machines"
   },
   {
     "id": "mec-466",
     "code": "MEC 466",
     "title": "Biomechanics and Robotics",
-    "closed": false
+    "closed": false,
+    "description": "Connect biomechanics and robotics across prosthetics, rehabilitation, human-robot interaction, sports, robot-aided surgery, and human movement analysis.",
+    "formLabel": "MEC 466 - Biomechanics and Robotics"
   },
   {
     "id": "mec-467",
     "code": "MEC 467",
     "title": "Rehabilitation Robotics",
-    "closed": false
+    "closed": false,
+    "description": "Explore rehabilitation robots and interfaces, then design and control prostheses, exoskeletons, wheelchairs, and other assistive systems.",
+    "formLabel": "MEC 467 - Rehabilitation Robotics"
   },
   {
     "id": "mec-468",
     "code": "MEC 468",
     "title": "Mobile Robot",
-    "closed": false
+    "closed": false,
+    "description": "Study mobile robot kinematics, sensing, control, navigation, multi-target tracking, obstacle mapping, and robot manipulation.",
+    "formLabel": "MEC 468 - Mobile Robot"
   },
   {
     "id": "mec-469",
     "code": "MEC 469",
     "title": "Micro robotics",
-    "closed": false
+    "closed": false,
+    "description": "Examine microrobot design, scaling and adhesion, electrostatic, thermal, shape-memory and piezoelectric actuators, and optical and electromagnetic sensing.",
+    "formLabel": "MEC 469 - Micro robotics"
   },
   {
     "id": "mec-476",
     "code": "MEC 476",
     "title": "Vehicle Dynamics and Control",
-    "closed": false
+    "closed": false,
+    "description": "Model vehicle lateral, longitudinal, and ride dynamics; study active safety, suspension, drive-by-wire, adaptive cruise control, and lane keeping.",
+    "formLabel": "MEC 476 - Vehicle Dynamics and Control"
   },
   {
     "id": "mec-477",
     "code": "MEC 477",
     "title": "Autonomous Vehicles",
-    "closed": false
+    "closed": false,
+    "description": "Use probabilistic estimation and decision-making for autonomous robots, including mapping, localization, planning, control, cooperation, and marine, ground, and air vehicles.",
+    "formLabel": "MEC 477 - Autonomous Vehicles"
   },
   {
     "id": "mec-478",
     "code": "MEC 478",
     "title": "Vehicle Safety and Control",
-    "closed": false
+    "closed": false,
+    "description": "Study integrated vehicle safety from warnings and collision avoidance through braking, stability control, airbags, restraint systems, and post-event response.",
+    "formLabel": "MEC 478 - Vehicle Safety and Control"
   },
   {
     "id": "mec-479",
     "code": "MEC 479",
     "title": "Introduction to Autotronics Systems",
-    "closed": false
+    "closed": false,
+    "description": "Survey vehicle systems including starting, fuel, ignition, transmission, steering, suspension, braking, HVAC, electric and hybrid vehicles, sensors, and actuators.",
+    "formLabel": "MEC 479 - Introduction to Autotronics Systems"
   }
 ]
